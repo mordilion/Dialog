@@ -1,0 +1,25 @@
+{
+    "name": "mordilion/dialog",
+    "description": "Logging was never so easy",
+    "keywords": ["log", "logs", "logging", "logger", "psr-3", "psr3"],
+    "homepage": "http://github.com/mordilion/Dialog",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Henning Huncke",
+            "email": "mordilion@gmx.de",
+            "homepage": "http://www.devjunkie.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Dialog\\": "src/Dialog"
+        }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "psr/log": "1.0.2",
+        "mordilion/configurable": "0.3"
+    }
+}
