@@ -21,13 +21,6 @@ use Dialog\Record\RecordInterface;
 class ArrayHandler extends HandlerAbstract
 {
     /**
-     * The URL (Uniform Resource Locator) for the stream.
-     *
-     * @var string
-     */
-    protected $url;
-
-    /**
      * The array for the data.
      *
      * @var array

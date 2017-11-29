@@ -56,9 +56,9 @@ class Logger extends AbstractLogger
      */
     public function __construct()
     {
-        $this->timezone = new \DateTimeZone(date_default_timezone_get());
-        $this->handlers = new HandlerCollection();
-        $this->processors = new ProcessorCollection();
+        $this->setTimezone(date_default_timezone_get());
+        $this->setHandlers(new HandlerCollection());
+        $this->setProcessors(new ProcessorCollection());
     }
 
     /**
@@ -70,7 +70,7 @@ class Logger extends AbstractLogger
             'message'  => $message,
             'context'  => $context,
             'level'    => $level,
-            'datetime' => new \DateTime('now', $this->timezone)
+            'datetime' => new \DateTime('now', $this->getTimezone())
         ));
 
         foreach ($this->getProcessors() as $processor) {
@@ -162,8 +162,6 @@ class Logger extends AbstractLogger
         } else {
             throw new \InvalidArgumentException('The provided timezone must be a string or an instance of \DateTimeZone.');
         }
-
-        $this->timezone = $timezone;
 
         return $this;
     }

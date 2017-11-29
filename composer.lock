@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa71ba15e47c9ef9caacddcad9068bf3",
+    "content-hash": "f3ab477ebc3955cc7a6e56acab839d69",
     "packages": [
         {
             "name": "mordilion/configurable",
-            "version": "0.4",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mordilion/Configurable.git",
-                "reference": "accff238d64c7d495b828660bd1ec719dcf6b65e"
+                "reference": "b00107e9223e3402b29f8b03899e41fdf0829f55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mordilion/Configurable/zipball/accff238d64c7d495b828660bd1ec719dcf6b65e",
-                "reference": "accff238d64c7d495b828660bd1ec719dcf6b65e",
+                "url": "https://api.github.com/repos/mordilion/Configurable/zipball/b00107e9223e3402b29f8b03899e41fdf0829f55",
+                "reference": "b00107e9223e3402b29f8b03899e41fdf0829f55",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "class configuration",
                 "configurable"
             ],
-            "time": "2017-11-13T13:07:48+00:00"
+            "time": "2017-11-28T18:48:09+00:00"
         },
         {
             "name": "psr/log",
