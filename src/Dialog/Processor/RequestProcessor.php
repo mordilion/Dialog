@@ -24,6 +24,11 @@ use Dialog\Record\RecordInterface;
  */
 class RequestProcessor extends ProcessorAbstract
 {
+    /**
+     * Server-Data to labels mapping.
+     *
+     * @var array
+     */
     private $mapping = array(
         'REMOTE_ADDR'     => 'IP',
         'SERVER_NAME'     => 'SERVER',
@@ -33,6 +38,11 @@ class RequestProcessor extends ProcessorAbstract
         'HTTP_USER_AGENT' => 'USER-AGENT'
     );
 
+    /**
+     * Array with Server-Data.
+     *
+     * @var array
+     */
     private $serverData;
 
 
@@ -47,20 +57,37 @@ class RequestProcessor extends ProcessorAbstract
         }
     }
 
+    /**
+     * Returns the mapping of the Server-Data to labels.
+     *
+     * @return array
+     */
     public function getMapping()
     {
         return $this->mapping;
     }
 
+    /**
+     * Returns the Server-Data.
+     *
+     * @return array
+     */
     public function getServerData()
     {
         if (!is_array($this->serverData)) {
-            $this->serverData = &$_SERVER;
+            $this->setServerData($_SERVER);
         }
 
         return $this->serverData;
     }
 
+    /**
+     * Sets the mapping of the Server-Data to labels.
+     *
+     * @param array $mapping
+     *
+     * @return RequestProcessor
+     */
     public function setMapping(array $mapping)
     {
         $this->mapping = $mapping;
@@ -68,6 +95,13 @@ class RequestProcessor extends ProcessorAbstract
         return $this;
     }
 
+    /**
+     * Sets the Server-Data.
+     *
+     * @param array $serverData
+     *
+     * @return RequestProcessor
+     */
     public function setServerData(array $serverData)
     {
         $this->serverData = $serverData;
@@ -75,6 +109,11 @@ class RequestProcessor extends ProcessorAbstract
         return $this;
     }
 
+    /**
+     * Returns the mapped Server-Data as an array.
+     *
+     * @return array
+     */
     private function getRequest()
     {
         $request    = array();
