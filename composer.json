@@ -20,6 +20,6 @@
     "require": {
         "php": ">=5.3.0",
         "psr/log": "1.0.2",
-        "mordilion/configurable": "0.4.*"
+        "mordilion/configurable": "0.5.*"
     }
 }
