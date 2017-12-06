@@ -12,7 +12,7 @@
 namespace Dialog\Processor;
 
 use Mordilion\Configurable\Configurable;
-use Mordilion\Configurable\Configuration;
+use Mordilion\Configurable\Configuration\Configuration;
 use Dialog\Condition\Conditionable;
 use Dialog\Condition\ConditionInterface;
 use Dialog\Record\RecordInterface;

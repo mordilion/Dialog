@@ -11,8 +11,8 @@
 
 namespace Dialog;
 
-use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Dialog Error-Handler-Class.
@@ -75,6 +75,16 @@ class ErrorHandler
     );
 
     /**
+     * The default Exception-Class to LogLevel mapping.
+     *
+     * @var array
+     */
+    private $defaultExceptionMapping = array(
+        'ParseError' => LogLevel::CRITICAL,
+        'Throwable'  => LogLevel::ERROR,
+    );
+
+    /**
      * The Error-Code to LogLevel mapping.
      *
      * @var array
@@ -82,11 +92,25 @@ class ErrorHandler
     private $errorMapping = array();
 
     /**
+     * The Exception-Code to LogLevel mapping.
+     *
+     * @var array
+     */
+    private $exceptionMapping = array();
+
+    /**
      * The previouse error handler if exists.
      *
      * @var mixed
      */
     private $previouseErrorHandler;
+
+    /**
+     * The previouse exception handler if exists.
+     *
+     * @var mixed
+     */
+    private $previouseExceptionHandler;
 
 
     public function __construct(LoggerInterface $logger)
@@ -107,13 +131,62 @@ class ErrorHandler
         }
     }
 
+    public function handleError($code, $message, $file = '', $line = 0, $context = array())
+    {
+        $level = isset($this->errorMapping[$code]) ? $this->errorMapping[$code] : LogLevel::CRITICAL;
+
+        $this->logger->log($level, self::codeToString($code) . ': ' . $message, array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line));
+
+        if ($this->previouseErrorHandler !== null) {
+            return call_user_func($this->previouseErrorHandler, $code, $message, $file, $line, $context);
+        }
+    }
+
+    public function handleException($exception)
+    {
+        $level = LogLevel::ERROR;
+
+        foreach ($this->exceptionMapping as $class => $logLevel) {
+            if ($exception instanceof $class) {
+                $level = $logLevel;
+                break;
+            }
+        }
+
+        $class   = get_class($exception);
+        $code    = $exception->getCode();
+        $message = $exception->getMessage();
+        $file    = $exception->getFile();
+        $line    = $exception->getLine();
+
+        $this->logger->log($level, 'Uncaught Exception "' . $class . '" with message "' . $message . '" in ' . $file . ':' . $line);
+
+        if ($this->previouseExceptionHandler !== null) {
+            call_user_func($this->previouseExceptionHandler, $exception);
+        }
+
+        exit(255);
+    }
+
     public function registerErrorHandler(array $mapping = array(), $preventPreviouse = false, $errorTypes = -1)
     {
-        $this->errorMapping = array_replace($this->defaultErrorMapping, $mapping);
+        $this->errorMapping          = array_replace($this->defaultErrorMapping, $mapping);
         $this->previouseErrorHandler = set_error_handler(array($this, 'handleError'), $errorTypes);
 
         if ($preventPreviouse) {
             $this->previouseErrorHandler = null;
+        }
+
+        return $this;
+    }
+
+    public function registerExceptionHandler(array $mapping = array(), $preventPreviouse = false)
+    {
+        $this->exceptionMapping          = array_merge($this->defaultExceptionMapping, $mapping);
+        $this->previouseExceptionHandler = set_exception_handler(array($this, 'handleException'));
+
+        if ($preventPreviouse) {
+            $this->previouseExceptionHandler = null;
         }
 
         return $this;
