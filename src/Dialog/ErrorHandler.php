@@ -113,12 +113,28 @@ class ErrorHandler
     private $previouseExceptionHandler;
 
 
+    /**
+     * Constructor.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    public static function register(LoggerInterface $logger, $errorMapping = array(), $exceptionMapping = array(), $fatalLevel = null)
+    /**
+     * Static method to register Eroor- and Exception-Handling.
+     *
+     * @param LoggerInterface $logger
+     * @param array|false $errorMapping
+     * @param array|false $exceptionMapping
+     *
+     * @return void
+     */
+    public static function register(LoggerInterface $logger, $errorMapping = array(), $exceptionMapping = array())
     {
         $handler = new static($logger);
 
@@ -131,43 +147,70 @@ class ErrorHandler
         }
     }
 
+    /**
+     * Method for Error-Handling.
+     *
+     * @param integer $code
+     * @param string $message
+     * @param string $file
+     * @param integer $line
+     * @param array $context
+     *
+     * @return mixed
+     */
     public function handleError($code, $message, $file = '', $line = 0, $context = array())
     {
         $level = isset($this->errorMapping[$code]) ? $this->errorMapping[$code] : LogLevel::CRITICAL;
 
-        $this->logger->log($level, self::codeToString($code) . ': ' . $message, array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line));
+        $this->logger->log($level, $this->codeToString($code) . ': ' . $message, array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line));
 
         if ($this->previouseErrorHandler !== null) {
             return call_user_func($this->previouseErrorHandler, $code, $message, $file, $line, $context);
         }
     }
 
-    public function handleException($exception)
+    /**
+     * Method for Exception-Handling.
+     *
+     * @param Exception $ex
+     *
+     * @return void
+     */
+    public function handleException($ex)
     {
         $level = LogLevel::ERROR;
 
         foreach ($this->exceptionMapping as $class => $logLevel) {
-            if ($exception instanceof $class) {
+            if ($ex instanceof $class) {
                 $level = $logLevel;
                 break;
             }
         }
 
-        $class   = get_class($exception);
-        $code    = $exception->getCode();
-        $message = $exception->getMessage();
-        $file    = $exception->getFile();
-        $line    = $exception->getLine();
+        $class   = get_class($ex);
+        $code    = $ex->getCode();
+        $message = $ex->getMessage();
+        $file    = $ex->getFile();
+        $line    = $ex->getLine();
 
         $this->logger->log($level, 'Uncaught Exception "' . $class . '" with message "' . $message . '" in ' . $file . ':' . $line);
 
         if ($this->previouseExceptionHandler !== null) {
-            call_user_func($this->previouseExceptionHandler, $exception);
+            call_user_func($this->previouseExceptionHandler, $ex);
         }
 
-        exit(255);
+        //exit(255);
     }
 
+    /**
+     * Method to register the Error-Handling.
+     *
+     * @param array $mapping
+     * @param boolean $preventPreviouse
+     * @param integer $errorTypes
+     *
+     * @return ErrorHandler
+     */
     public function registerErrorHandler(array $mapping = array(), $preventPreviouse = false, $errorTypes = -1)
     {
         $this->errorMapping          = array_replace($this->defaultErrorMapping, $mapping);
@@ -180,6 +223,14 @@ class ErrorHandler
         return $this;
     }
 
+    /**
+     * Method to register the Exception-Handling.
+     *
+     * @param array $mapping
+     * @param boolean $preventPreviouse
+     *
+     * @return ErrorHandler
+     */
     public function registerExceptionHandler(array $mapping = array(), $preventPreviouse = false)
     {
         $this->exceptionMapping          = array_merge($this->defaultExceptionMapping, $mapping);
@@ -192,6 +243,13 @@ class ErrorHandler
         return $this;
     }
 
+    /**
+     * Returns the string for the provided Error-Code.
+     *
+     * @param integer $code
+     *
+     * @return string
+     */
     private function codeToString($code)
     {
         if (isset($this->errorCodes[$code])) {
