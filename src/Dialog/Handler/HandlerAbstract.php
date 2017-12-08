@@ -18,7 +18,6 @@ use Dialog\Condition\Conditionable;
 use Dialog\Record\RecordInterface;
 use Dialog\Formatter\FormatterInterface;
 use Dialog\Formatter\LineFormatter;
-use Dialog\Formatter\Collection as FormatterCollection;
 
 /**
  * Dialog Handler-Abstract-Class.
@@ -52,8 +51,6 @@ abstract class HandlerAbstract implements HandlerInterface
      */
     public function __construct($configuration = null)
     {
-        $this->formatters = new FormatterCollection();
-
         if ($configuration != null) {
             $this->setConfiguration(new Configuration($configuration));
         }
@@ -65,7 +62,7 @@ abstract class HandlerAbstract implements HandlerInterface
     public function getFormatter()
     {
         if (!$this->formatter instanceof FormatterInterface) {
-            $this->setFormatter(new LineFormatter());
+            $this->setFormatter(new LineFormatter()); // fallback if nothing was defined
         }
 
         return $this->formatter;

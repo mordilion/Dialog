@@ -21,6 +21,24 @@ use Dialog\Record\RecordInterface;
 trait Normalizer
 {
     /**
+     * Format of normalized datetime information.
+     *
+     * @var string
+     */
+    private $datetimeFormat = \DateTime::ATOM;
+
+
+    /**
+     * Returns the normalized date format.
+     *
+     * @return string
+     */
+    public function getDatetimeFormat()
+    {
+        return $this->datetimeFormat;
+    }
+
+    /**
      * Normalizes the provided $data based on what type the provided $data is.
      *
      * @param mixed $data
@@ -78,7 +96,7 @@ trait Normalizer
      *
      * @return string
      */
-    public function normalizeDatetime(\DateTimeInterface $datetime, $format = \DateTime::ATOM)
+    public function normalizeDatetime(\DateTimeInterface $datetime, $format)
     {
         return $datetime->format($format);
     }
@@ -124,7 +142,7 @@ trait Normalizer
             }
 
             if ($object instanceof \DateTimeInterface) {
-                return $this->normalizeDatetime($object);
+                return $this->normalizeDatetime($object, $this->getDatetimeFormat());
             }
 
             if ($object instanceof \JsonSerializable) {
@@ -164,5 +182,17 @@ trait Normalizer
         unset($array['formatted']);
 
         return $this->normalizeArray($array);
+    }
+
+    /**
+     * Sets the normalized date format.
+     *
+     * @return string
+     */
+    public function setDatetimeFormat($format)
+    {
+        $this->datetimeFormat = (string)$format;
+
+        return $this;
     }
 }

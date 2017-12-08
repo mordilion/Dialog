@@ -35,7 +35,7 @@ class LineFormatter extends FormatterAbstract
      *
      * @var string
      */
-    protected $format = '[%#datetime#%] %#level|upper#%: %#message#% %#context#% %#additional#%';
+    protected $format = "[%#datetime#%] [%#level|upper#%] %#message#% %#context#% %#additional#%" . PHP_EOL;
 
 
     /**
@@ -111,9 +111,17 @@ class LineFormatter extends FormatterAbstract
      */
     private function replace(&$line, array $match, array $data)
     {
-        $segments = explode('|', $match[1]);
-        $modifier = isset($segments[1]) ? $segments[1] : false;
-        $parts    = explode('.', $segments[0]);
+        $modifier = false;
+        $parts    = array();
+
+        if (preg_match('/([^\|]+)\|(.+)|(.+)/', $match[1], $segments)) {
+            if (isset($segments[3])) {
+                $parts = explode('.', $segments[3]);
+            } else {
+                $parts    = explode('.', $segments[1]);
+                $modifier = !empty($segments[2]) ? $segments[2] : false;
+            }
+        }
 
         foreach ($parts as $part) {
             if (!is_array($data) || !isset($data[$part])) {
@@ -130,7 +138,7 @@ class LineFormatter extends FormatterAbstract
                 $this->replaceLine($replacement, $data);
                 $data = $replacement;
             } else {
-                $data = '';
+                $data = '{}';
             }
         }
 
@@ -152,7 +160,5 @@ class LineFormatter extends FormatterAbstract
                 $this->replace($line, $match, $data);
             }
         }
-
-        $line = trim($line);
     }
 }

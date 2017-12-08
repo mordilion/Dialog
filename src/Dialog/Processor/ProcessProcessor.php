@@ -26,10 +26,10 @@ class ProcessProcessor extends ProcessorAbstract
     public function process(RecordInterface &$record)
     {
         if ($this->isHandling($record)) {
-            $record->addAdditional('PROCESS', array(
+            $record->addAdditional('Process', array(
                 'ID'    => getmypid(),
-                'USER'  => getmyuid(),
-                'GROUP' => getmygid()
+                'User'  => getmyuid(),
+                'Group' => getmygid()
             ));
         }
     }

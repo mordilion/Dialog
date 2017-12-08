@@ -182,7 +182,7 @@ class StreamHandler extends HandlerAbstract
         $formatter = $this->getFormatter();
         $formatted = $formatter->format($record);
 
-        fwrite($stream, (string)$formatted . PHP_EOL);
+        fwrite($stream, (string)$formatted);
 
         if ($this->locking) {
             flock($stream, LOCK_UN);
