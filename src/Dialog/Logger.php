@@ -14,6 +14,7 @@ namespace Dialog;
 use Psr\Log\AbstractLogger;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
+use Dialog\LoggerInterface;
 use Dialog\Record\Record;
 use Dialog\Handler\HandlerInterface;
 use Dialog\Handler\Collection as HandlerCollection;
@@ -25,7 +26,7 @@ use Dialog\Processor\Collection as ProcessorCollection;
  *
  * @author Henning Huncke <mordilion@gmx.de>
  */
-class Logger extends AbstractLogger
+class Logger extends AbstractLogger implements LoggerInterface
 {
     /**
      * Handler collection.
