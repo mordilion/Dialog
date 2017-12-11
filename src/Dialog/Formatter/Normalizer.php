@@ -77,12 +77,16 @@ trait Normalizer
      *
      * @return array
      */
-    public function normalizeArray(array $array)
+    public function normalizeArray(array $array, $jsonEncode = false)
     {
         $result = array();
 
-        foreach ($array as $key => $value) {
-            $result[$key] = $this->normalize($value);
+        if ($jsonEncode) {
+            $result = @json_encode($array, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
+        } else {
+            foreach ($array as $key => $value) {
+                $result[$key] = $this->normalize($value);
+            }
         }
 
         return $result;
