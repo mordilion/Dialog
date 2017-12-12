@@ -20,8 +20,8 @@ use Dialog\Record\RecordInterface;
  */
 class LineFormatter extends FormatterAbstract
 {
-    const MODIFIER_LOWER = 'lower';
-    const MODIFIER_UPPER = 'upper';
+    const MODIFIER_LOWER  = 'lower';
+    const MODIFIER_UPPER  = 'upper';
 
 
     /**
@@ -35,7 +35,7 @@ class LineFormatter extends FormatterAbstract
      *
      * @var string
      */
-    protected $format = "[%#datetime#%] [%#level|upper#%] %#message#% %#context#% %#additional#%" . PHP_EOL;
+    protected $format = "[%#datetime#%] [%#level|upper#%] %#message#% " . PHP_EOL . "   - Context: %#context#%" . PHP_EOL . "   - Additional: %#additional#%" . PHP_EOL . "   - Backtrace: %#backtrace#%" . PHP_EOL . PHP_EOL;
 
 
     /**
@@ -133,13 +133,9 @@ class LineFormatter extends FormatterAbstract
         }
 
         if (is_array($data)) {
-            if (!empty($data)) {
-                $replacement = json_encode($data, JSON_UNESCAPED_UNICODE);
-                $this->replaceLine($replacement, $data);
-                $data = $replacement;
-            } else {
-                $data = '{}';
-            }
+            $replacement = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $this->replaceLine($replacement, $data);
+            $data = $replacement;
         }
 
         $line = str_replace($match[0], $this->modify($modifier, $data), $line);

@@ -67,11 +67,16 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
+        $backtrace = debug_backtrace();
+        array_shift($backtrace);
+        $backtrace = array_values($backtrace); // rebase the array
+
         $record = new Record(array(
-            'message'  => $message,
-            'context'  => $context,
-            'level'    => $level,
-            'datetime' => new \DateTime('now', $this->getTimezone())
+            Record::MESSAGE   => $message,
+            Record::CONTEXT   => $context,
+            Record::LEVEL     => $level,
+            Record::DATETIME  => new \DateTime('now', $this->getTimezone()),
+            Record::BACKTRACE => $backtrace
         ));
 
         foreach ($this->getProcessors() as $processor) {

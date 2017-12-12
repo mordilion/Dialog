@@ -60,6 +60,7 @@ class HtmlFormatter extends FormatterAbstract
         $html .= $this->getRow('Time', $data['datetime']);
         $html .= $this->getRow('Context', $this->normalizeArray($record->getContext(), true));
         $html .= $this->getRow('Additional', $this->normalizeArray($record->getAdditional(), true));
+        $html .= $this->getRow('Backtrace', $this->normalizeArray($record->getBacktrace(), true));
 
         $html .= '  </table>';
         $html .= '</div>';
@@ -74,8 +75,7 @@ class HtmlFormatter extends FormatterAbstract
      */
     public function getCss()
     {
-        $color = isset($this->levelColors[$level]) ? $this->levelColors[$level] : '#cccccc';
-        $css   = '.dialog { background-color: #ffffff; color: #000000; margin-bottom: 40px; } .dialog table th, .dialog table th { padding: 5px 8px; text-align: left; }';
+        $css = '.dialog { background-color: #ffffff; color: #000000; margin-bottom: 40px; } .dialog table th, .dialog table th { padding: 5px 8px; text-align: left; }';
 
         foreach ($this->levelColors as $level => $color) {
             $css .= '.dialog .dialog-title-' . $level . ' { background-color: ' . $color . '; color: #ffffff; padding: 5px 10px; }';
@@ -118,6 +118,6 @@ class HtmlFormatter extends FormatterAbstract
             $description = htmlspecialchars($description);
         }
 
-        return '<tr class="dialog-row"><th class="dialog-row-header">' . $header . ':</th><td class="dialog-row-description">' . $description . '</td></tr>';
+        return '<tr class="dialog-row"><th class="dialog-row-header">' . $header . ':</th><td class="dialog-row-description"><pre>' . $description . '</pre></td></tr>';
     }
 }

@@ -35,6 +35,7 @@ class Record implements RecordInterface
      */
     protected $defaults = array(
         self::ADDITIONAL => array(),
+        self::BACKTRACE  => array(),
         self::CONTEXT    => array(),
         self::DATETIME   => null,
         self::LEVEL      => LogLevel::DEBUG,
@@ -79,6 +80,14 @@ class Record implements RecordInterface
     /**
      * {@inheritdoc}
      */
+    public function getBacktrace()
+    {
+        return $this->configuration->get(self::BACKTRACE, $this->defaults[self::BACKTRACE]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContext()
     {
         return $this->configuration->get(self::CONTEXT, $this->defaults[self::CONTEXT]);
@@ -114,6 +123,16 @@ class Record implements RecordInterface
     public function setAdditional(array $additional)
     {
         $this->configuration->set(self::ADDITIONAL, $additional);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBacktrace(array $backtrace)
+    {
+        $this->configuration->set(self::BACKTRACE, $backtrace);
 
         return $this;
     }

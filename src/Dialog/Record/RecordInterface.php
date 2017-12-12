@@ -19,6 +19,7 @@ namespace Dialog\Record;
 interface RecordInterface
 {
     const ADDITIONAL = 'additional';
+    const BACKTRACE  = 'backtrace';
     const CONTEXT    = 'context';
     const DATETIME   = 'datetime';
     const LEVEL      = 'level';
@@ -52,6 +53,13 @@ interface RecordInterface
      * @return array
      */
     public function getAdditional();
+
+    /**
+     * Returns the backtrace of the record.
+     *
+     * @return array
+     */
+    public function getBacktrace();
 
     /**
      * Returns the context of the record.
@@ -89,6 +97,15 @@ interface RecordInterface
      * @return RecordInterface
      */
     public function setAdditional(array $additional);
+
+    /**
+     * Sets the backtrace of the record.
+     *
+     * @param array $backtrace
+     *
+     * @return RecordInterface
+     */
+    public function setBacktrace(array $backtrace);
 
     /**
      * Sets the context of the record.
