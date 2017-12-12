@@ -27,7 +27,7 @@ class LineFormatter extends FormatterAbstract
     /**
      * Use the following traits.
      */
-    use Normalizer;
+    use Normalizeable;
 
 
     /**

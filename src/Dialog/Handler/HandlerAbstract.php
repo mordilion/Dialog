@@ -16,8 +16,6 @@ use Mordilion\Configurable\Configuration\Configuration;
 use Dialog\Condition\ConditionedTrait;
 use Dialog\Condition\Conditionable;
 use Dialog\Record\RecordInterface;
-use Dialog\Formatter\FormatterInterface;
-use Dialog\Formatter\LineFormatter;
 
 /**
  * Dialog Handler-Abstract-Class.
@@ -30,14 +28,6 @@ abstract class HandlerAbstract implements HandlerInterface
      * Use the following traits.
      */
     use Configurable, Conditionable;
-
-
-    /**
-     * Formatter collection.
-     *
-     * @var FormatterInterface
-     */
-    protected $formatter;
 
 
     /**
@@ -59,31 +49,7 @@ abstract class HandlerAbstract implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormatter()
-    {
-        if (!$this->formatter instanceof FormatterInterface) {
-            $this->setFormatter(new LineFormatter()); // fallback if nothing was defined
-        }
-
-        return $this->formatter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     abstract public function handle($records);
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        unset($this->formatter);
-
-        $this->formatter = $formatter;
-
-        return $this;
-    }
 
     /**
      * Returns a filtered array with all records.

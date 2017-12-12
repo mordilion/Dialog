@@ -11,6 +11,7 @@
 
 namespace Dialog\Handler;
 
+use Dialog\Formatter\Formattable;
 use Dialog\Record\RecordInterface;
 
 /**
@@ -20,6 +21,12 @@ use Dialog\Record\RecordInterface;
  */
 class ArrayHandler extends HandlerAbstract
 {
+    /**
+     * Use the following traits.
+     */
+    use Formattable;
+
+
     /**
      * The array for the data.
      *

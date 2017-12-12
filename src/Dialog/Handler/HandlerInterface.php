@@ -12,7 +12,6 @@
 namespace Dialog\Handler;
 
 use Dialog\Condition\ConditionedInterface;
-use Dialog\Formatter\FormatterInterface;
 
 /**
  * Dialog Handler-Interface.
@@ -22,13 +21,6 @@ use Dialog\Formatter\FormatterInterface;
 interface HandlerInterface extends ConditionedInterface
 {
     /**
-     * Returns the current formatter.
-     *
-     * @return FormatterInterface
-     */
-    public function getFormatter();
-
-    /**
      * The Handler will handling all provided record objects.
      *
      * @param array|RecordInterface $records
@@ -36,13 +28,4 @@ interface HandlerInterface extends ConditionedInterface
      * @return boolean
      */
     public function handle($records);
-
-    /**
-     * Sets the formatter to the provided $formatter.
-     *
-     * @param FormatterInterface $formatter
-     *
-     * @return HandlerInterface
-     */
-    public function setFormatter(FormatterInterface $formatter);
 }

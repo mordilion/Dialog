@@ -24,7 +24,7 @@ class HtmlFormatter extends FormatterAbstract
     /**
      * Use the following traits.
      */
-    use Normalizer;
+    use Normalizeable;
 
 
     /**
