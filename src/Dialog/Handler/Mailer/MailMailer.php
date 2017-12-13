@@ -21,7 +21,7 @@ class MailMailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function send($from, $to, $subject, $content)
+    public function send($from, $to, $cc, $bcc, $subject, $content)
     {
         $header = '';
 
@@ -29,7 +29,8 @@ class MailMailer implements MailerInterface
         $header .= 'Content-Type: ' . $this->getContentType($content) . PHP_EOL;
 
         $header .= 'From: ' . $from . PHP_EOL;
-        $header .= 'X-Mailer: PHP ' . phpversion();
+        $header .= 'Cc: ' . $cc . PHP_EOL;
+        $header .= 'Bcc: ' . $cc . PHP_EOL;
 
         mail($to, $subject, $content, $header);
     }

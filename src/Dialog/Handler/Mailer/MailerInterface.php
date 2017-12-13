@@ -23,10 +23,12 @@ interface MailerInterface
      *
      * @param string $from
      * @param string $to
+     * @param string|null $cc
+     * @param string|null $bcc
      * @param string $subject
      * @param string $content
      *
      * @return boolean
      */
-    public function send($from, $to, $subject, $content);
+    public function send($from, $to, $cc, $bcc, $subject, $content);
 }

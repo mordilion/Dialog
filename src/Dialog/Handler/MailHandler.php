@@ -32,11 +32,18 @@ class MailHandler extends HandlerAbstract
 
 
     /**
-     * Mailer to send the messages.
+     * BCC for the messages.
      *
-     * @var MailerInterface
+     *@var string|null
      */
-    protected $mailer;
+    protected $bcc;
+
+    /**
+     * CC for the messages.
+     *
+     *@var string|null
+     */
+    protected $cc;
 
     /**
      * Sender for the messages.
@@ -44,6 +51,13 @@ class MailHandler extends HandlerAbstract
      * @var string
      */
     protected $from = 'noreply@dialog.invalid';
+
+    /**
+     * Mailer to send the messages.
+     *
+     * @var MailerInterface
+     */
+    protected $mailer;
 
     /**
      * Subject for the messages.
@@ -73,6 +87,46 @@ class MailHandler extends HandlerAbstract
     }
 
     /**
+     * Returns the BCC address.
+     *
+     * @return string|null
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * Returns the CC address.
+     *
+     * @return string|null
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * Returns the sender address.
+     *
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * Returns the sender address.
+     *
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
      * Returns the mailer.
      *
      * @return MailerInterface
@@ -84,16 +138,6 @@ class MailHandler extends HandlerAbstract
         }
 
         return $this->mailer;
-    }
-
-    /**
-     * Returns the sender address.
-     *
-     * @return string
-     */
-    public function getFrom()
-    {
-        return $this->from;
     }
 
     /**
@@ -133,15 +177,43 @@ class MailHandler extends HandlerAbstract
     }
 
     /**
-     * Sets the mailer.
+     * Sets the BCC address.
      *
-     * @param MailerInterface $mailer
+     * @param string|null $address
      *
      * @return MailHandler
      */
-    public function setMailer(MailerInterface $mailer)
+    public function setTo($address)
     {
-        $this->mailer = $mailer;
+        if ($address !== null) {
+            // TODO add check for a comma delimitered list
+            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+                throw new \InvalidArgumentException('The provided email address is not a valid email address.');
+            }
+        }
+
+        $this->bcc = $address;
+
+        return $this;
+    }
+
+    /**
+     * Sets the CC address.
+     *
+     * @param string|null $address
+     *
+     * @return MailHandler
+     */
+    public function setCc($address)
+    {
+        if ($address !== null) {
+            // TODO add check for a comma delimitered list
+            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+                throw new \InvalidArgumentException('The provided email address is not a valid email address.');
+            }
+        }
+
+        $this->cc = $address;
 
         return $this;
     }
@@ -160,6 +232,20 @@ class MailHandler extends HandlerAbstract
         }
 
         $this->from = $address;
+
+        return $this;
+    }
+
+    /**
+     * Sets the mailer.
+     *
+     * @param MailerInterface $mailer
+     *
+     * @return MailHandler
+     */
+    public function setMailer(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
 
         return $this;
     }
@@ -187,6 +273,7 @@ class MailHandler extends HandlerAbstract
      */
     public function setTo($address)
     {
+        // TODO add check for a comma delimitered list
         if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('The provided email address is not a valid email address.');
         }
@@ -210,7 +297,7 @@ class MailHandler extends HandlerAbstract
 
         $subject = $subjectFormatter->format($record);
 
-        $this->getMailer()->send($this->getFrom(), $this->getTo(), $subject, $this->getFormatter()->format($record));
+        $this->getMailer()->send($this->getFrom(), $this->getTo(), $this->getCc(), $this->getBcc(), $subject, $this->getFormatter()->format($record));
 
         return $this;
     }
