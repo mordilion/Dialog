@@ -1,5 +1,5 @@
-## Basic Usagees
-### Write everything into a file
+## Basic Usages
+### Write all log messages into a file
 ```php
 <?php
 
@@ -20,6 +20,7 @@ $logger->warning('This is a warning message!');
 ```php
 <?php
 
+use Psr\Log\LogLevel;
 use Dialog\Logger;
 use Dialog\Handler\StreamHandler;
 use Dialog\Condition\LevelCondition;
