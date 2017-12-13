@@ -68,7 +68,7 @@ class ArrayHandler extends HandlerAbstract
      *
      * @return void
      */
-    private function write(RecordInterface $record)
+    protected function write(RecordInterface $record)
     {
         $formatter = $this->getFormatter();
         $formatted = $formatter->format($record);
