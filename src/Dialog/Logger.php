@@ -57,7 +57,6 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function __construct()
     {
-        $this->setTimezone(date_default_timezone_get());
         $this->setHandlers(new HandlerCollection());
         $this->setProcessors(new ProcessorCollection());
     }
@@ -129,6 +128,10 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function getTimezone()
     {
+        if (!$this->timezone instanceof \DateTimeZone) {
+            $this->setTimezone(date_default_timezone_get());
+        }
+
         return $this->timezone;
     }
 

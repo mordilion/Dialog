@@ -58,6 +58,10 @@ class DatetimeCondition extends ConditionAbstract
      */
     public function getTimezone()
     {
+        if (!$this->timezone instanceof \DateTimeZone) {
+            $this->setTimezone(date_default_timezone_get());
+        }
+
         return $this->timezone;
     }
 
@@ -73,14 +77,12 @@ class DatetimeCondition extends ConditionAbstract
     public function setTimezone($timezone)
     {
         if (is_string($timezone)) {
-            $timezone = new \DateTimeZone($timezone);
+            $this->timezone = new \DateTimeZone($timezone);
+        } else if ($timezone instanceof \DateTimeZone) {
+            $this->timezone = $timezone;
+        } else {
+            throw new \InvalidArgumentException('The provided timezone must be a string or an instance of \DateTimeZone.');
         }
-
-        if (!$timezone instanceof \DateTimeZone && $timezone !== null) {
-            throw new InvalidArgumentException('The provided timezone must be a string, null or an instance of \DateTimeZone.');
-        }
-
-        $this->timezone = $timezone;
 
         return $this;
     }
