@@ -32,27 +32,6 @@ class MailHandler extends HandlerAbstract
 
 
     /**
-     * BCC for the messages.
-     *
-     *@var string|null
-     */
-    protected $bcc;
-
-    /**
-     * CC for the messages.
-     *
-     *@var string|null
-     */
-    protected $cc;
-
-    /**
-     * Sender for the messages.
-     *
-     * @var string
-     */
-    protected $from = 'noreply@dialog.invalid';
-
-    /**
      * Mailer to send the messages.
      *
      * @var MailerInterface
@@ -60,18 +39,11 @@ class MailHandler extends HandlerAbstract
     protected $mailer;
 
     /**
-     * Subject for the messages.
+     * Subject-Format for the messages.
      *
      * @var string
      */
-    protected $subject = '[%#datetime#%] [%#level|upper#%] %#message#%';
-
-    /**
-     * Recipient for the messages.
-     *
-     * @var string
-     */
-    protected $to;
+    protected $subjectFormat = '[%#datetime#%] [%#level|upper#%] %#message#%';
 
 
     /**
@@ -84,46 +56,6 @@ class MailHandler extends HandlerAbstract
         if ($configuration != null) {
             $this->setConfiguration(new Configuration($configuration));
         }
-    }
-
-    /**
-     * Returns the BCC address.
-     *
-     * @return string|null
-     */
-    public function getBcc()
-    {
-        return $this->bcc;
-    }
-
-    /**
-     * Returns the CC address.
-     *
-     * @return string|null
-     */
-    public function getCc()
-    {
-        return $this->cc;
-    }
-
-    /**
-     * Returns the sender address.
-     *
-     * @return string
-     */
-    public function getFrom()
-    {
-        return $this->from;
-    }
-
-    /**
-     * Returns the sender address.
-     *
-     * @return string
-     */
-    public function getFrom()
-    {
-        return $this->from;
     }
 
     /**
@@ -141,23 +73,13 @@ class MailHandler extends HandlerAbstract
     }
 
     /**
-     * Returns the subject.
+     * Returns the Subject-Format.
      *
      * @return string
      */
-    public function getSubject()
+    public function getSubjectFormat()
     {
-        return $this->subject;
-    }
-
-    /**
-     * Returns the recipient address.
-     *
-     * @return string
-     */
-    public function getTo()
-    {
-        return $this->to;
+        return $this->subjectFormat;
     }
 
     /**
@@ -177,66 +99,6 @@ class MailHandler extends HandlerAbstract
     }
 
     /**
-     * Sets the BCC address.
-     *
-     * @param string|null $address
-     *
-     * @return MailHandler
-     */
-    public function setTo($address)
-    {
-        if ($address !== null) {
-            // TODO add check for a comma delimitered list
-            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-                throw new \InvalidArgumentException('The provided email address is not a valid email address.');
-            }
-        }
-
-        $this->bcc = $address;
-
-        return $this;
-    }
-
-    /**
-     * Sets the CC address.
-     *
-     * @param string|null $address
-     *
-     * @return MailHandler
-     */
-    public function setCc($address)
-    {
-        if ($address !== null) {
-            // TODO add check for a comma delimitered list
-            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-                throw new \InvalidArgumentException('The provided email address is not a valid email address.');
-            }
-        }
-
-        $this->cc = $address;
-
-        return $this;
-    }
-
-    /**
-     * Sets the sender address.
-     *
-     * @param string $address
-     *
-     * @return MailHandler
-     */
-    public function setFrom($address)
-    {
-        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('The provided email address is not a valid email address.');
-        }
-
-        $this->from = $address;
-
-        return $this;
-    }
-
-    /**
      * Sets the mailer.
      *
      * @param MailerInterface $mailer
@@ -251,34 +113,15 @@ class MailHandler extends HandlerAbstract
     }
 
     /**
-     * Sets the subject.
+     * Sets the Subject-Format.
      *
      * @param string $subject
      *
      * @return MailHandler
      */
-    public function setSubject($subject)
+    public function setSubjectFormat($format)
     {
-        $this->subejct = (string)$subject;
-
-        return $this;
-    }
-
-    /**
-     * Sets the recipient address.
-     *
-     * @param string $address
-     *
-     * @return MailHandler
-     */
-    public function setTo($address)
-    {
-        // TODO add check for a comma delimitered list
-        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('The provided email address is not a valid email address.');
-        }
-
-        $this->to = $address;
+        $this->subejctFormat = (string)$format;
 
         return $this;
     }
@@ -293,11 +136,11 @@ class MailHandler extends HandlerAbstract
     protected function send(RecordInterface $record)
     {
         $subjectFormatter = new LineFormatter();
-        $subjectFormatter->setFormat($this->getSubject());
+        $subjectFormatter->setFormat($this->getSubjectFormat());
 
         $subject = $subjectFormatter->format($record);
 
-        $this->getMailer()->send($this->getFrom(), $this->getTo(), $this->getCc(), $this->getBcc(), $subject, $this->getFormatter()->format($record));
+        $this->getMailer()->send($subject, $this->getFormatter()->format($record));
 
         return $this;
     }

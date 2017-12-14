@@ -11,28 +11,30 @@
 
 namespace Dialog\Handler\Mailer;
 
+use Dialog\Handler\Mailer\MailerAbstract;
+
 /**
  * Dialog Mail-Mailer.
  *
  * @author Henning Huncke <mordilion@gmx.de>
  */
-class MailMailer implements MailerInterface
+class MailMailer extends MailerAbstract
 {
     /**
      * {@inheritdoc}
      */
-    public function send($from, $to, $cc, $bcc, $subject, $content)
+    public function send($subject, $content)
     {
         $header = '';
 
         $header .= 'MIME-Version: 1.0' . PHP_EOL;
         $header .= 'Content-Type: ' . $this->getContentType($content) . PHP_EOL;
 
-        $header .= 'From: ' . $from . PHP_EOL;
-        $header .= 'Cc: ' . $cc . PHP_EOL;
-        $header .= 'Bcc: ' . $cc . PHP_EOL;
+        $header .= 'From: ' . $this->getFrom() . PHP_EOL;
+        $header .= 'Cc: ' . $this->getCc() . PHP_EOL;
+        $header .= 'Bcc: ' . $this->getBcc() . PHP_EOL;
 
-        mail($to, $subject, $content, $header);
+        mail($this->getTo(), $subject, $content, $header);
     }
 
     /**
