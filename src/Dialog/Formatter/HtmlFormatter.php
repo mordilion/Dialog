@@ -52,7 +52,7 @@ class HtmlFormatter extends FormatterAbstract
         $data = $this->normalize($record);
         $html = '';
 
-        $html .= '<div class="dialog">';
+        $html .= '<div style="background-color: #ffffff; color: #000000; margin-bottom: 40px;">';
         $html .= '  ' . $this->getTitle($record->getLevel(), strtoupper($record->getLevel()));
         $html .= '  <table>';
 
@@ -69,24 +69,6 @@ class HtmlFormatter extends FormatterAbstract
     }
 
     /**
-     * Returns the default CSS for the HTML layout.
-     *
-     * @return string
-     */
-    public function getCss()
-    {
-        $css = '.dialog { background-color: #ffffff; color: #000000; margin-bottom: 40px; } .dialog table th, .dialog table th { padding: 5px 8px; text-align: left; }';
-
-        foreach ($this->levelColors as $level => $color) {
-            $css .= '.dialog .dialog-title-' . $level . ' { background-color: ' . $color . '; color: #ffffff; padding: 5px 10px; }';
-        }
-
-        $css .= '.dialog .dialog-row-header { background-color: #ecf0f1; } .dialog .dialog-row-description { background-color: #ffffff; }';
-
-        return $css;
-    }
-
-    /**
      * Returns the HTML code for a h1 title tag.
      *
      * @param string $level
@@ -96,9 +78,10 @@ class HtmlFormatter extends FormatterAbstract
      */
     protected function getTitle($level, $title)
     {
+        $color = isset($this->levelColors[$level]) ? $this->levelColors[$level] : '#eeeeee';
         $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
 
-        return '<h1 class="dialog-title-' . $level . '">' . $title . '</h1>';
+        return '<h1 style="background-color: ' . $level . '; color: #ffffff; padding: 5px 10px;">' . $title . '</h1>';
     }
 
     /**
@@ -118,6 +101,6 @@ class HtmlFormatter extends FormatterAbstract
             $description = htmlspecialchars($description);
         }
 
-        return '<tr class="dialog-row"><th class="dialog-row-header">' . $header . ':</th><td class="dialog-row-description"><pre>' . $description . '</pre></td></tr>';
+        return '<tr class="dialog-row"><th style="background-color: #ecf0f1; padding: 5px 8px; text-align: left;">' . $header . ':</th><td style="background-color: #ffffff; padding: 5px 8px; text-align: left;"><pre>' . $description . '</pre></td></tr>';
     }
 }
