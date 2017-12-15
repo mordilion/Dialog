@@ -21,6 +21,71 @@ use Dialog\Handler\Mailer\MailerAbstract;
 class MailMailer extends MailerAbstract
 {
     /**
+     * BCC for the messages.
+     *
+     *@var string|null
+     */
+    protected $bcc;
+
+    /**
+     * CC for the messages.
+     *
+     *@var string|null
+     */
+    protected $cc;
+
+    /**
+     * Sender for the messages.
+     *
+     * @var string
+     */
+    protected $from = 'noreply@dialog.invalid';
+
+    /**
+     * Recipient for the messages.
+     *
+     * @var string
+     */
+    protected $to;
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTo()
+    {
+        if (empty($this->to)) {
+            throw new \RuntimeException('There is no recipient configured.');
+        }
+
+        return $this->to;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function send($subject, $content)
@@ -35,6 +100,78 @@ class MailMailer extends MailerAbstract
         $header .= 'Bcc: ' . $this->getBcc() . PHP_EOL;
 
         mail($this->getTo(), $subject, $content, $header);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBcc($address)
+    {
+        if ($address !== null) {
+            $addresses = explode(',', $address);
+
+            foreach ($addresses as $addr) {
+                if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+                    throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
+                }
+            }
+        }
+
+        $this->bcc = $address;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCc($address)
+    {
+        if ($address !== null) {
+            $addresses = explode(',', $address);
+
+            foreach ($addresses as $addr) {
+                if (!filter_var($addr, FILTER_VALIDATE_EMAIL)) {
+                    throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
+                }
+            }
+        }
+
+        $this->cc = $address;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFrom($address)
+    {
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('The provided email address "' . $address . '" is not a valid email address.');
+        }
+
+        $this->from = $address;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTo($address)
+    {
+        $addresses = explode(',', $address);
+
+        foreach ($addresses as $addr) {
+            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+                throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
+            }
+        }
+
+        $this->to = $address;
+
+        return $this;
     }
 
     /**
