@@ -39,7 +39,7 @@ abstract class MailerAbstract implements MailerInterface
      *
      * @var array
      */
-    protected $from = array('noreply@dialog.invalid');
+    protected $from = array('noreply@dialog.invalid' => 'Dialog Message');
 
     /**
      * Recipient for the messages.
