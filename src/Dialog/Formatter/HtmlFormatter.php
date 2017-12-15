@@ -101,6 +101,6 @@ class HtmlFormatter extends FormatterAbstract
             $description = htmlspecialchars($description);
         }
 
-        return '<tr class="dialog-row"><th style="background-color: #ecf0f1; padding: 5px 8px; text-align: left;">' . $header . ':</th><td style="background-color: #ffffff; padding: 5px 8px; text-align: left;"><pre>' . $description . '</pre></td></tr>';
+        return '<tr style="padding: 5px 8px;"><th style="background-color: #ecf0f1; text-align: left;">' . $header . ':</th><td style="background-color: #ffffff; text-align: left;"><pre>' . $description . '</pre></td></tr>';
     }
 }
