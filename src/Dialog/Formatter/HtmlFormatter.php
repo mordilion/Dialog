@@ -81,7 +81,7 @@ class HtmlFormatter extends FormatterAbstract
         $color = isset($this->levelColors[$level]) ? $this->levelColors[$level] : '#eeeeee';
         $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
 
-        return '<h1 style="background-color: ' . $level . '; color: #ffffff; padding: 5px 10px;">' . $title . '</h1>';
+        return '<h1 style="background-color: ' . $color . '; color: #ffffff; padding: 5px 10px;">' . $title . '</h1>';
     }
 
     /**
