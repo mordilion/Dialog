@@ -23,123 +23,42 @@ abstract class MailerAbstract implements MailerInterface
     /**
      * BCC for the messages.
      *
-     *@var string|null
+     *@var array
      */
-    protected $bcc;
+    protected $bcc = array();
 
     /**
      * CC for the messages.
      *
-     *@var string|null
+     *@var array
      */
-    protected $cc;
+    protected $cc = array();
 
     /**
      * Sender for the messages.
      *
-     * @var string
+     * @var array
      */
-    protected $from = 'noreply@dialog.invalid';
+    protected $from = array('noreply@dialog.invalid');
 
     /**
      * Recipient for the messages.
      *
-     * @var string
+     * @var array
      */
-    protected $to;
+    protected $to = array();
 
 
     /**
      * {@inheritdoc}
      */
-    public function getBcc()
-    {
-        return $this->bcc;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCc()
-    {
-        return $this->cc;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFrom()
-    {
-        return $this->from;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTo()
-    {
-        if (empty($this->to)) {
-            throw new \RuntimeException('There is no recipient configured.');
-        }
-
-        return $this->to;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function send($subejct, $content);
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setBcc($address)
-    {
-        if ($address !== null) {
-            $addresses = explode(',', $address);
-
-            foreach ($addresses as $addr) {
-                if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-                    throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
-                }
-            }
-        }
-
-        $this->bcc = $address;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCc($address)
-    {
-        if ($address !== null) {
-            $addresses = explode(',', $address);
-
-            foreach ($addresses as $addr) {
-                if (!filter_var($addr, FILTER_VALIDATE_EMAIL)) {
-                    throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
-                }
-            }
-        }
-
-        $this->cc = $address;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setFrom($address)
+    public function addBcc($address, $name = null)
     {
         if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('The provided email address "' . $address . '" is not a valid email address.');
         }
 
-        $this->from = $address;
+        $this->bcc[$address] = $name;
 
         return $this;
     }
@@ -147,18 +66,193 @@ abstract class MailerAbstract implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function setTo($address)
+    public function addCc($address, $name = null)
     {
-        $addresses = explode(',', $address);
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('The provided email address "' . $address . '" is not a valid email address.');
+        }
 
-        foreach ($addresses as $addr) {
-            if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
-                throw new \InvalidArgumentException('The provided email address "' . $addr . '" is not a valid email address.');
+        $this->cc[$address] = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addFrom($address, $name = null)
+    {
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('The provided email address "' . $address . '" is not a valid email address.');
+        }
+
+        $this->from[$address] = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addTo($address, $name = null)
+    {
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('The provided email address "' . $address . '" is not a valid email address.');
+        }
+
+        $this->to[$address] = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBcc($asArray = false)
+    {
+        $result = $this->bcc;
+
+        if (!$asArray) {
+            $result = $this->implodeAddresses($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCc($asArray = false)
+    {
+        $result = $this->cc;
+
+        if (!$asArray) {
+            $result = $this->implodeAddresses($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFrom($asArray = false)
+    {
+        $result = $this->from;
+
+        if (!$asArray) {
+            $result = $this->implodeAddresses($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTo($asArray = false)
+    {
+        $result = $this->to;
+
+        if (!$asArray) {
+            $result = $this->implodeAddresses($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function send($subject, $content);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBcc(array $addresses)
+    {
+        $this->bcc = array();
+
+        foreach ($addresses as $address => $name) {
+            if (!is_string($address)) {
+                $this->addBcc($name);
+            } else {
+                $this->addBcc($address, $name);
             }
         }
 
-        $this->to = $address;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCc(array $addresses)
+    {
+        $this->cc = array();
+
+        foreach ($addresses as $address => $name) {
+            if (!is_string($address)) {
+                $this->addCc($name);
+            } else {
+                $this->addCc($address, $name);
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFrom(array $addresses)
+    {
+        $this->from = array();
+
+        foreach ($addresses as $address => $name) {
+            if (!is_string($address)) {
+                $this->addFrom($name);
+            } else {
+                $this->addFrom($address, $name);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTo(array $addresses)
+    {
+        $this->to = array();
+
+        foreach ($addresses as $address => $name) {
+            if (!is_string($address)) {
+                $this->addTo($name);
+            } else {
+                $this->addTo($address, $name);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the provided addresses array as a concated string.
+     *
+     * @param array $addresses
+     *
+     * @return string
+     */
+    protected function implodeAddresses(array $addresses)
+    {
+        $result = array();
+
+        foreach ($addresses as $address => $name) {
+            $result[] = !empty($name) && is_string($name) ? $name . '<' . $address . '>' : $address;
+        }
+
+        return implode(',', $result);
     }
 }
