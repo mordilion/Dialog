@@ -52,18 +52,18 @@ class HtmlFormatter extends FormatterAbstract
         $data = $this->normalize($record);
         $html = '';
 
-        $html .= '<div style="background-color: #ffffff; color: #000000; margin-bottom: 40px;">';
+        $html .= '<div style="background-color: #ffffff; color: #000000; margin-bottom: 40px;">' . PHP_EOL;
         $html .= '  ' . $this->getTitle($record->getLevel(), strtoupper($record->getLevel()));
-        $html .= '  <table>';
+        $html .= '  <table>' . PHP_EOL;
 
-        $html .= $this->getRow('Message', $data['message']);
-        $html .= $this->getRow('Time', $data['datetime']);
-        $html .= $this->getRow('Context', $this->normalizeArray($record->getContext(), true));
-        $html .= $this->getRow('Additional', $this->normalizeArray($record->getAdditional(), true));
-        $html .= $this->getRow('Backtrace', $this->normalizeArray($record->getBacktrace(), true));
+        $html .= '    ' . $this->getRow('Message', $data['message']);
+        $html .= '    ' . $this->getRow('Time', $data['datetime']);
+        $html .= '    ' . $this->getRow('Context', $this->normalizeArray($record->getContext(), true));
+        $html .= '    ' . $this->getRow('Additional', $this->normalizeArray($record->getAdditional(), true));
+        $html .= '    ' . $this->getRow('Backtrace', $this->normalizeArray($record->getBacktrace(), true));
 
-        $html .= '  </table>';
-        $html .= '</div>';
+        $html .= '  </table>' . PHP_EOL;
+        $html .= '</div>' . PHP_EOL;
 
         return $html;
     }
@@ -81,7 +81,7 @@ class HtmlFormatter extends FormatterAbstract
         $color = isset($this->levelColors[$level]) ? $this->levelColors[$level] : '#eeeeee';
         $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
 
-        return '<h1 style="background-color: ' . $color . '; color: #ffffff; padding: 5px 10px;">' . $title . '</h1>';
+        return '<h1 style="background-color: ' . $color . '; color: #ffffff; padding: 5px 10px;">' . $title . '</h1>' . PHP_EOL;
     }
 
     /**
@@ -101,6 +101,6 @@ class HtmlFormatter extends FormatterAbstract
             $description = htmlspecialchars($description);
         }
 
-        return '<tr style="padding: 5px 8px;"><th style="background-color: #ecf0f1; text-align: left;">' . $header . ':</th><td style="background-color: #ffffff; text-align: left;"><pre>' . $description . '</pre></td></tr>';
+        return '<tr style="padding: 5px 8px;"><th style="background-color: #ecf0f1; text-align: left;">' . $header . ':</th><td style="background-color: #ffffff; text-align: left;"><pre>' . $description . '</pre></td></tr>' . PHP_EOL;
     }
 }
