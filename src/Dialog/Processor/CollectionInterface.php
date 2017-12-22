@@ -35,16 +35,6 @@ interface CollectionInterface extends \IteratorAggregate, \Countable
     public function count();
 
     /**
-     * If it finds an item with the provided $condition
-     * then it returns the index, otherwise -1;
-     *
-     * @param callable $condition
-     *
-     * @return integer
-     */
-    public function find(callable $condition);
-
-    /**
      * {@inheritdoc}
      */
     public function getIterator();

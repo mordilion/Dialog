@@ -14,6 +14,12 @@
     </filter>
 
     <php>
+        <server name="REMOTE_ADDR" value="X-IP" />
+	<server name="SERVER_NAME" value="X-Server" />
+	<server name="REQUEST_METHOD" value="X-Method" />
+	<server name="REQUEST_URI" value="X-URI" />
+	<server name="HTTP_REFERER" value="X-Referer" />
+	<server name="HTTP_USER_AGENT" value="X-User-Agent" />
         <ini name="date.timezone" value="UTC" />
     </php>
 </phpunit>

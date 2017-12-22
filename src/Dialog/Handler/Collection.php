@@ -45,20 +45,6 @@ class Collection implements CollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function find(callable $condition)
-    {
-        foreach ($this as $key => $item) {
-            if ($condition($item)) {
-                return $key;
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
