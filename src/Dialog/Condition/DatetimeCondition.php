@@ -42,7 +42,15 @@ class DatetimeCondition extends ConditionAbstract
             $right = array();
 
             foreach ($value as $datetime) {
-                $right[] = new \DateTime($datetime, $this->timezone);
+                if (is_string($datetime)) {
+                    $datetime = @new \DateTime($datetime, $this->timezone)
+                }
+
+                if ($datetime instanceof \DateTime) {
+                    $right[] = $datetime;
+                } else {
+                    throw new \InvalidArgumentException('The provided date and time is not valid.');
+                }
             }
         } else {
             $right = new \DateTime($value, $this->timezone);
