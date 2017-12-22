@@ -23,6 +23,9 @@ class LineFormatter extends FormatterAbstract
     const MODIFIER_LOWER  = 'lower';
     const MODIFIER_UPPER  = 'upper';
 
+    const FORMAT_DEFAULT  = "[%#datetime#%] [%#level|upper#%] %#message#% %#context#% %#additional#%" . PHP_EOL;
+    const FORMAT_DETAILED = "[%#datetime#%] [%#level|upper#%] %#message#% " . PHP_EOL . "   - Context: %#context#%" . PHP_EOL . "   - Additional: %#additional#%" . PHP_EOL . "   - Backtrace: %#backtrace#%" . PHP_EOL . PHP_EOL;
+
 
     /**
      * Use the following traits.
@@ -35,7 +38,7 @@ class LineFormatter extends FormatterAbstract
      *
      * @var string
      */
-    protected $format = "[%#datetime#%] [%#level|upper#%] %#message#% " . PHP_EOL . "   - Context: %#context#%" . PHP_EOL . "   - Additional: %#additional#%" . PHP_EOL . "   - Backtrace: %#backtrace#%" . PHP_EOL . PHP_EOL;
+    protected $format = self::FORMAT_DEFAULT;
 
 
     /**
