@@ -31,5 +31,36 @@ $condition = (new ContextCondition())
 ```
 
 ## Datetime
+```php
+<?php
+
+use Dialog\Condition\DatetimeCondition;
+
+{...}
+
+$condition = (new DatetimeCondition())
+    ->setTimezone('America/Chicago')
+    ->setValue('10:00AM')
+    ->setOperator(DatetimeCondition::OPERATOR_GREATER_EQUAL);
+
+{...}
+```
+
 ## Level
+```php
+<?php
+
+use Dialog\Condition\LevelCondition;
+use Psr\Log\LogLevel;
+
+{...}
+
+$condition = (new LevelCondition())
+    ->setTimezone('America/Chicago')
+    ->setValue(array(LogLevel::WARNING, LogLevel::ERROR))
+    ->setOperator(LevelCondition::OPERATOR_IN);
+
+{...}
+```
+
 ## Factory
