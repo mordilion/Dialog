@@ -107,7 +107,7 @@ class MemoryProcessor extends ProcessorAbstract
     {
         $result = (string)$bytes;
 
-        if ($this->formatMemory) {
+        if ($this->getFormatMemory()) {
             $units  = array('Bytes', 'KB', 'MB', 'GB', 'TB');
 
             foreach ($units as $multiplier => $unit) {

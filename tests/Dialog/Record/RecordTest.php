@@ -11,6 +11,7 @@ class RecordTest extends TestCase
     {
         $data = array(
             Record::ADDITIONAL => array('additional' => 'test'),
+            Record::BACKTRACE  => array('Line 1', 'Line 2', 'Line 3'),
             Record::CONTEXT    => array('context' => 'whatever'),
             Record::DATETIME   => new \DateTime('now'),
             Record::LEVEL      => LogLevel::WARNING,
@@ -21,6 +22,7 @@ class RecordTest extends TestCase
 
         $this->assertInstanceOf(Record::class, $record);
         $this->assertEquals($record->getAdditional(), $data[Record::ADDITIONAL]);
+        $this->assertEquals($record->getBacktrace(), $data[Record::BACKTRACE]);
         $this->assertEquals($record->getContext(), $data[Record::CONTEXT]);
         $this->assertEquals($record->getDatetime(), $data[Record::DATETIME]);
         $this->assertEquals($record->getLevel(), $data[Record::LEVEL]);
