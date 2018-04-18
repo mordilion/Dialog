@@ -43,7 +43,7 @@ class DatetimeCondition extends ConditionAbstract
 
             foreach ($value as $datetime) {
                 if (is_string($datetime)) {
-                    $datetime = @new \DateTime($datetime, $this->timezone)
+                    $datetime = @new \DateTime($datetime, $this->timezone);
                 }
 
                 if ($datetime instanceof \DateTime) {
