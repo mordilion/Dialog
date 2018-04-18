@@ -14,7 +14,7 @@ $logger = new Logger();
 
 $condition = new LevelCondition();
 $condition->setValue(LogLevel::WARNING)
-    ->setOperator(LevelCondition::OPERATOR_GREATER_EQUAL);
+    ->setOperator(LevelCondition::OPERATOR_GREATER_EQUAL); // or ->setOperator('>=');
 
 // Create a StreamHandler instance and add it to the logger instance
 $handler = new StreamHandler();
@@ -45,7 +45,7 @@ $logger = new Logger();
 
 $condition = new LevelCondition();
 $condition->setValue(LogLevel::WARNING)
-    ->setOperator(LevelCondition::OPERATOR_GREATER_EQUAL);
+    ->setOperator(LevelCondition::OPERATOR_GREATER_EQUAL); // or ->setOperator('>=');
 
 // Create a StreamHandler instance and add it to the logger instance
 $handler = new StreamHandler();

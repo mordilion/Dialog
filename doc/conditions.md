@@ -25,7 +25,7 @@ use Dialog\Condition\ContextCondition;
 $condition = (new ContextCondition())
     ->setField('FieldIndex')
     ->setValue('some content')
-    ->setOperator(ContextCondition::OPERATOR_EQUAL);
+    ->setOperator(ContextCondition::OPERATOR_EQUAL); // or ->setOperator('=');
 
 {...}
 ```
@@ -41,7 +41,7 @@ use Dialog\Condition\DatetimeCondition;
 $condition = (new DatetimeCondition())
     ->setTimezone('America/Chicago')
     ->setValue('10:00AM')
-    ->setOperator(DatetimeCondition::OPERATOR_GREATER_EQUAL);
+    ->setOperator(DatetimeCondition::OPERATOR_GREATER_EQUAL); // or ->setOperator('>=');
 
 {...}
 ```
@@ -58,7 +58,7 @@ use Psr\Log\LogLevel;
 $condition = (new LevelCondition())
     ->setTimezone('America/Chicago')
     ->setValue(array(LogLevel::WARNING, LogLevel::ERROR))
-    ->setOperator(LevelCondition::OPERATOR_IN);
+    ->setOperator(LevelCondition::OPERATOR_IN); // or ->setOperator('in');
 
 {...}
 ```
