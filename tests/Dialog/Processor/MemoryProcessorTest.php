@@ -23,9 +23,9 @@ class MemoryProcessorTest extends TestCase
     public function testMemoryProcessWritesSpecificValuesToTheProvidedRecordUnformattedRealUsage()
     {
         $record    = new Record();
-        $processor = new MemoryProcessor();
+        $processor = new MemoryProcessor(array('formatMemory' => false));
 
-        $processor->setFormatMemory(false);
+        //$processor->setFormatMemory(false);
 
         $processor->process($record);
 
